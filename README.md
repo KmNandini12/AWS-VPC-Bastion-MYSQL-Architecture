@@ -1,7 +1,5 @@
 # AWS VPC with Public/Private Subnets and MySQL Database
 
-![AWS VPC Architecture Diagram](https://via.placeholder.com/800x400/0D1117/FFFFFF?text=AWS+VPC+Architecture+Diagram)
-[Replace with your Lucidchart diagram link]
 
 ## Project Overview
 This project demonstrates a secure, production-ready AWS VPC architecture implementing a two-tier application model. It features a public subnet hosting a bastion host and a private subnet containing a MySQL database server, connected via a NAT Gateway for controlled internet access.
@@ -14,8 +12,8 @@ This project demonstrates a secure, production-ready AWS VPC architecture implem
 * Implement MySQL database with remote access capabilities from authorized instances
 
 ## Architecture
-![Detailed Architecture Diagram](https://via.placeholder.com/1000x500/0D1117/FFFFFF?text=Detailed+Architecture+Diagram)
-[Replace with your detailed Lucidchart diagram]
+![Detailed Architecture Diagram]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/d1ecde8690ad1e5ef493c52d03d76b93249e4642/Architecture.png)
+
 
 ### Components
 
@@ -38,7 +36,7 @@ This project demonstrates a secure, production-ready AWS VPC architecture implem
 * Region: us-east-1
 * Tenancy: Default
 
-![VPC Dashboard](https://screenshots/vpc-dashboard.png)
+![VPC Dashboard]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/d1ecde8690ad1e5ef493c52d03d76b93249e4642/VPC%20Dashboard.png)
 *VPC dashboard showing created resources*
 
 **2. Subnet Configuration**
@@ -48,28 +46,30 @@ This project demonstrates a secure, production-ready AWS VPC architecture implem
 | Public-Subnet | Public | us-east-1a | 10.0.1.0/24 | Enabled |
 | Private-Subnet | Private | us-east-1a | 10.0.2.0/24 | Disabled |
 
-![Subnets View](https://screenshots/subnets-view.png)
-*Subnet configuration showing public/private segregation*
+![Subnets View]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/Private%20Subnet.png)
+*Subnet configuration showing private segregation*
 
 **3. Gateway Setup**
 * Internet Gateway: Attached to VPC for public subnet internet access
 * NAT Gateway: Placed in public subnet with Elastic IP for private subnet egress
 
-![NAT Gateway](https://screenshots/nat-gateway.png)
+![NAT Gateway]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/NAT%20Gateway.png
+)
 *NAT Gateway showing "Available" status in public subnet*
 
 **4. Route Tables**
 * Public Route Table: Destination: 0.0.0.0/0 -> Target: Internet Gateway (Associated with Public-Subnet)
 * Private Route Table: Destination: 0.0.0.0/0 -> Target: NAT Gateway (Associated with Private-Subnet)
 
-![Route Tables](https://screenshots/route-tables.png)
+![Route Tables]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/Public%20Route%20Table.png)
+![Route Tables]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/Private%20Route%20Table.png)
 *Route tables showing IGW and NAT Gateway targets*
 
 **5. Security Groups**
 * Bastion-SG (Public Instance): Inbound: SSH (22) from trusted IPs | Outbound: All traffic
 * MySQL-SG (Private Instance): Inbound: SSH (22) and MySQL (3306) from VPC CIDR | Outbound: All traffic
 
-![Security Groups](https://screenshots/security-groups.png)
+![Security Groups]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/Private%20Security%20Group.png)
 *Security group rules ensuring least-privilege access*
 
 ### Phase 2: EC2 Instance Deployment
@@ -81,7 +81,8 @@ This project demonstrates a secure, production-ready AWS VPC architecture implem
 | Bastion-Host | Public-Subnet | Enabled | Bastion-SG | SSH jump host, MySQL client |
 | MySQL-Server | Private-Subnet | Disabled | MySQL-SG | Isolated database server |
 
-![EC2 Instances](https://screenshots/ec2-instances.png)
+![EC2 Instances]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/Public%20Server.png)
+![EC2 Instances]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/MYSQL%20Server(private).png)
 *EC2 instances showing public/private IP configuration*
 
 ### Phase 3: Database Configuration
@@ -103,8 +104,9 @@ sudo systemctl restart mysql
 
 # MySQL Installation and Configuration on Private Instance
 
-![MySQL Installation](https://screenshots/mysql-installation.png)
-
+![MySQL Installation](https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/Accessing%20SQL%20Server%20via%20Bastion%20Server.png)
+![MySQL Installation]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/79e39fa46a223f213133fbcf2ec864002c64cb74/Creation%20of%20DB%20and%20USER%20via%20Private%20Server%20.png)
+![MySQL Installation](https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/79e39fa46a223f213133fbcf2ec864002c64cb74/Accessing%20MYSQL%20via%20Public%20Server(Bastion%20Host).png)
 ## 8. Database and User Setup
 
 ```sql
@@ -124,7 +126,7 @@ FLUSH PRIVILEGES;
 # From private instance (no public IP)
 curl ifconfig.me # Returns NAT Gateway's public IP
 ```
-
+![MySQL Installation]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/79e39fa46a223f213133fbcf2ec864002c64cb74/Success%20NAT%20Connection.jpeg)
 ### 10. Database Connectivity Test
 
 ```bash
