@@ -252,5 +252,5 @@ SELECT User, Host FROM mysql.user;
 
 ## Author
 **Kumari Nandini**
-[LinkedIn Profile](https://www.linkedin.com/in/kumari-nandini/) | [GitHub Profile](https://github.com/dashboard)
+[LinkedIn Profile](https://www.linkedin.com/in/kumari-nandini/) | [GitHub Profile](https://github.com/KmNandini12)
 
