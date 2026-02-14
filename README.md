@@ -106,7 +106,7 @@ sudo systemctl restart mysql
 
 ![MySQL Installation](https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/Accessing%20SQL%20Server%20via%20Bastion%20Server.png)
 ![MySQL Installation]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/79e39fa46a223f213133fbcf2ec864002c64cb74/Creation%20of%20DB%20and%20USER%20via%20Private%20Server%20.png)
-![MySQL Installation](https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/79e39fa46a223f213133fbcf2ec864002c64cb74/Accessing%20MYSQL%20via%20Public%20Server(Bastion%20Host).png)
+
 ## 8. Database and User Setup
 
 ```sql
@@ -126,19 +126,20 @@ FLUSH PRIVILEGES;
 # From private instance (no public IP)
 curl ifconfig.me # Returns NAT Gateway's public IP
 ```
-![MySQL Installation]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/79e39fa46a223f213133fbcf2ec864002c64cb74/Success%20NAT%20Connection.jpeg)
+![MySQL Installation]()
 ### 10. Database Connectivity Test
 
 ```bash
 # From bastion host
-mysql -h 10.0.2.15 -u remote_admin -p
-Enter password: SecurePass123!
+mysql -h 10.0.2.139 -u remote_admin -p
+Enter password.
 
 -- Inside MySQL
 SHOW DATABASES;
 USE company_db;
 SELECT User, Host FROM mysql.user;
 ```
+![MySQL Installation](https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/79e39fa46a223f213133fbcf2ec864002c64cb74/Accessing%20MYSQL%20via%20Public%20Server(Bastion%20Host).png)
 ## Key Features Demonstrated
 
 ### Security
