@@ -97,8 +97,8 @@ ssh -i key.pem ubuntu@<PRIVATE-IP-ADDRESS>
 sudo apt update  # Demonstrates NAT Gateway functionality
 sudo apt install mysql-server -y
 
-# Configure MySQL for remote access, chnaging bind addr 127.0.0.1 --> 0.0.0.0
-sudo sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
+# Configure MySQL for remote access, chnaging bind addr 127.0.0.1 --> 10.0.2.139(Private server IP Addr)
+sudo sed -i 's/127.0.0.1/10.0.2..139/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo systemctl restart mysql
 ```
 ![Enter private Server](https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/Accessing%20SQL%20Server%20via%20Bastion%20Server.png)
@@ -111,7 +111,7 @@ sudo systemctl restart mysql
 ```sql
 
 CREATE DATABASE company_db;
-CREATE USER 'remote_admin'@'%' IDENTIFIED BY 'SecurePass123!';
+CREATE USER 'remote_admin'@'%' IDENTIFIED BY 'your_password';
 GRANT ALL PRIVILEGES ON company_db.* TO 'remote_admin'@'%';
 GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD ON *.* TO 'remote_admin'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
