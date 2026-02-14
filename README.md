@@ -66,8 +66,8 @@ This project demonstrates a secure, production-ready AWS VPC architecture implem
 *Route tables showing IGW and NAT Gateway targets*
 
 **5. Security Groups**
-* Bastion-SG (Public Instance): Inbound: SSH (22) from trusted IPs | Outbound: All traffic
-* MySQL-SG (Private Instance): Inbound: SSH (22) and MySQL (3306) from VPC CIDR | Outbound: All traffic
+* Public Instance: Inbound: SSH (22) from trusted IPs | Outbound: All traffic
+* Private Instance (MYSQL Server): Inbound: SSH (22) and MySQL (3306) from VPC CIDR | Outbound: All traffic
 
 ![Security Groups]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/Private%20Security%20Group.png)
 *Security group rules ensuring least-privilege access*
@@ -78,8 +78,8 @@ This project demonstrates a secure, production-ready AWS VPC architecture implem
 
 | Instance | Subnet | Public IP | Security Group | Purpose |
 | :--- | :--- | :--- | :--- | :--- |
-| Bastion-Host | Public-Subnet | Enabled | Bastion-SG | SSH jump host, MySQL client |
-| MySQL-Server | Private-Subnet | Disabled | MySQL-SG | Isolated database server |
+| Bastion-Host | Public-Subnet | Enabled | Public-SG | SSH jump host, MySQL client |
+| MySQL-Server | Private-Subnet | Disabled | Private-SG | Isolated database server |
 
 ![EC2 Instances]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/Public%20Server.png)
 ![EC2 Instances]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/MYSQL%20Server(private).png)
@@ -91,32 +91,33 @@ This project demonstrates a secure, production-ready AWS VPC architecture implem
 ```bash
 # Connect to private instance via bastion
 ssh -i key.pem ubuntu@<BASTION-PUBLIC-IP>
-ssh -i key.pem ubuntu@10.0.2.15
+ssh -i key.pem ubuntu@<PRIVATE-IP-ADDRESS>
 
 # Install MySQL Server
 sudo apt update  # Demonstrates NAT Gateway functionality
 sudo apt install mysql-server -y
 
-# Configure MySQL for remote access
+# Configure MySQL for remote access, chnaging bind addr 127.0.0.1 --> 0.0.0.0
 sudo sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo systemctl restart mysql
 ```
+![Enter private Server](https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/Accessing%20SQL%20Server%20via%20Bastion%20Server.png)
+*ssh into Private server via Bastion server*
 
 # MySQL Installation and Configuration on Private Instance
-
-![MySQL Installation](https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/5fc53d726e255ed77cd204d8f844bf341501e1a6/Accessing%20SQL%20Server%20via%20Bastion%20Server.png)
-![MySQL Installation]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/79e39fa46a223f213133fbcf2ec864002c64cb74/Creation%20of%20DB%20and%20USER%20via%20Private%20Server%20.png)
 
 ## 8. Database and User Setup
 
 ```sql
--- Create database and remote user
+
 CREATE DATABASE company_db;
 CREATE USER 'remote_admin'@'%' IDENTIFIED BY 'SecurePass123!';
 GRANT ALL PRIVILEGES ON company_db.* TO 'remote_admin'@'%';
 GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD ON *.* TO 'remote_admin'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 ```
+![MySQL Installation]( https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/79e39fa46a223f213133fbcf2ec864002c64cb74/Creation%20of%20DB%20and%20USER%20via%20Private%20Server%20.png)
+*Create database and remote user*
 
 ## Phase 4: Connectivity Testing
 
@@ -126,7 +127,9 @@ FLUSH PRIVILEGES;
 # From private instance (no public IP)
 curl ifconfig.me # Returns NAT Gateway's public IP
 ```
-![MySQL Installation]()
+![NAT Gateway verification](https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/7813a05af98876371481f86f6781885b5c9fe431/Success%20NAT%20Connection.jpeg)
+*Showing success NAT connection and*
+*curl command showing ip of public server*
 ### 10. Database Connectivity Test
 
 ```bash
@@ -139,7 +142,7 @@ SHOW DATABASES;
 USE company_db;
 SELECT User, Host FROM mysql.user;
 ```
-![MySQL Installation](https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/79e39fa46a223f213133fbcf2ec864002c64cb74/Accessing%20MYSQL%20via%20Public%20Server(Bastion%20Host).png)
+![SQL Access](https://github.com/KmNandini12/AWS-VPC-Bastion-MYSQL-Architecture/blob/79e39fa46a223f213133fbcf2ec864002c64cb74/Accessing%20MYSQL%20via%20Public%20Server(Bastion%20Host).png)
 ## Key Features Demonstrated
 
 ### Security
